@@ -1,0 +1,292 @@
+@charset "UTF-8";
+/*
+html5doctor.com Reset Stylesheet
+v1.6.1
+Last Updated: 2010-09-17
+Author: Richard Clark - http://richclarkdesign.com
+Twitter: @rich_clark
+*/
+html, body, div, span, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+abbr, address, cite, code,
+del, dfn, em, img, ins, kbd, q, samp,
+small, strong, sub, sup, var,
+b, i,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, figcaption, figure,
+footer, header, hgroup, menu, nav, section, summary,
+time, mark, audio, video {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  outline: 0;
+  font-size: 100%;
+  vertical-align: baseline;
+  background: transparent; }
+
+body {
+  line-height: 1; }
+
+article, aside, details, figcaption, figure,
+footer, header, hgroup, menu, nav, section {
+  display: block; }
+
+nav ul {
+  list-style: none; }
+
+blockquote, q {
+  quotes: none; }
+
+blockquote:before, blockquote:after,
+q:before, q:after {
+  content: '';
+  content: none; }
+
+a {
+  margin: 0;
+  padding: 0;
+  font-size: 100%;
+  vertical-align: baseline;
+  background: transparent; }
+
+/* change colours to suit your needs */
+ins {
+  background-color: #ff9;
+  color: #000;
+  text-decoration: none; }
+
+/* change colours to suit your needs */
+mark {
+  background-color: #ff9;
+  color: #000;
+  font-style: italic;
+  font-weight: bold; }
+
+del {
+  text-decoration: line-through; }
+
+abbr[title], dfn[title] {
+  border-bottom: 1px dotted;
+  cursor: help; }
+
+table {
+  border-collapse: collapse;
+  border-spacing: 0; }
+
+/* change border colour to suit your needs */
+hr {
+  display: block;
+  height: 1px;
+  border: 0;
+  border-top: 1px solid #cccccc;
+  margin: 1em 0;
+  padding: 0; }
+
+input, select {
+  vertical-align: middle; }
+
+/* ========= variables ========= */
+/* ========= clearfix ========= */
+.clearfix::after {
+  clear: both;
+  content: "";
+  display: block; }
+
+/* ========= common ========= */
+body {
+  font-family: 游明朝,"Yu Mincho",YuMincho,"Hiragino Mincho ProN","Hiragino Mincho Pro",HGS明朝E,メイリオ,Meiryo,serif;
+  font-size: 20px;
+  color: #fff; }
+
+.wrapper {
+  height: 100vh;
+  background: url(../img/XENO_bg.png) center center/cover no-repeat; }
+
+.inner {
+  width: 80%;
+  height: 90vh;
+  margin: 0 auto;
+  padding: 5vh 0;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+  -ms-flex-pack: justify;
+  justify-content: space-between; }
+
+li {
+  list-style: none; }
+
+img {
+  vertical-align: bottom; }
+
+/* ========= individuals ========= */
+.players {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  -webkit-box-pack: justify;
+  -ms-flex-pack: justify;
+  justify-content: space-between;
+  width: 40%; }
+  .players .hand .hand-cards {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex; }
+    .players .hand .hand-cards .hand-card {
+      width: 200px; }
+      .players .hand .hand-cards .hand-card img {
+        width: 100%;
+        border-radius: 10px; }
+  .players #cp-hand .hand-cards .hand-card.reverse {
+    position: relative; }
+    .players #cp-hand .hand-cards .hand-card.reverse::after {
+      content: "";
+      display: block;
+      width: 200px;
+      height: 310px;
+      border-radius: 10px;
+      background: url(../img/reverse.png) center center/cover no-repeat;
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: 10; }
+
+.field {
+  width: 55%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  -webkit-box-pack: justify;
+  -ms-flex-pack: justify;
+  justify-content: space-between; }
+  .field .cemetery {
+    position: relative; }
+    .field .cemetery .cemetery-cards .cemetery-card {
+      width: 140px;
+      height: 215px;
+      border-radius: 7px; }
+      .field .cemetery .cemetery-cards .cemetery-card img {
+        width: 100%;
+        border-radius: 10px; }
+      .field .cemetery .cemetery-cards .cemetery-card:nth-child(2) {
+        position: absolute;
+        top: 0;
+        left: 0px; }
+      .field .cemetery .cemetery-cards .cemetery-card:nth-child(3) {
+        position: absolute;
+        top: 0;
+        left: 50px; }
+      .field .cemetery .cemetery-cards .cemetery-card:nth-child(4) {
+        position: absolute;
+        top: 0;
+        left: 100px; }
+      .field .cemetery .cemetery-cards .cemetery-card:nth-child(5) {
+        position: absolute;
+        top: 0;
+        left: 150px; }
+      .field .cemetery .cemetery-cards .cemetery-card:nth-child(6) {
+        position: absolute;
+        top: 0;
+        left: 200px; }
+      .field .cemetery .cemetery-cards .cemetery-card:nth-child(7) {
+        position: absolute;
+        top: 0;
+        left: 250px; }
+      .field .cemetery .cemetery-cards .cemetery-card:nth-child(8) {
+        position: absolute;
+        top: 0;
+        left: 300px; }
+      .field .cemetery .cemetery-cards .cemetery-card:nth-child(9) {
+        position: absolute;
+        top: 0;
+        left: 350px; }
+      .field .cemetery .cemetery-cards .cemetery-card:nth-child(10) {
+        position: absolute;
+        top: 0;
+        left: 400px; }
+      .field .cemetery .cemetery-cards .cemetery-card:nth-child(11) {
+        position: absolute;
+        top: 0;
+        left: 450px; }
+      .field .cemetery .cemetery-cards .cemetery-card:nth-child(12) {
+        position: absolute;
+        top: 0;
+        left: 500px; }
+      .field .cemetery .cemetery-cards .cemetery-card:nth-child(13) {
+        position: absolute;
+        top: 0;
+        left: 550px; }
+      .field .cemetery .cemetery-cards .cemetery-card:nth-child(14) {
+        position: absolute;
+        top: 0;
+        left: 600px; }
+      .field .cemetery .cemetery-cards .cemetery-card:nth-child(15) {
+        position: absolute;
+        top: 0;
+        left: 650px; }
+      .field .cemetery .cemetery-cards .cemetery-card:nth-child(16) {
+        position: absolute;
+        top: 0;
+        left: 700px; }
+      .field .cemetery .cemetery-cards .cemetery-card:nth-child(17) {
+        position: absolute;
+        top: 0;
+        left: 750px; }
+      .field .cemetery .cemetery-cards .cemetery-card:nth-child(18) {
+        position: absolute;
+        top: 0;
+        left: 800px; }
+  .field .deck {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex; }
+    .field .deck .actions {
+      display: -webkit-box;
+      display: -ms-flexbox;
+      display: flex;
+      -webkit-box-orient: vertical;
+      -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+      flex-direction: column;
+      -webkit-box-pack: center;
+      -ms-flex-pack: center;
+      justify-content: center; }
+      .field .deck .actions .btn {
+        background-color: transparent;
+        border: none;
+        cursor: pointer;
+        outline: none;
+        padding: 0;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
+        width: 100px;
+        height: 50px;
+        border-radius: 5px;
+        background: #ee7b1a;
+        -webkit-box-shadow: 1px 1px 1px #000;
+        box-shadow: 1px 1px 1px #000;
+        color: #fff;
+        font-size: 16px; }
+      .field .deck .actions #draw-btn {
+        margin-bottom: 20px; }
+        .field .deck .actions #draw-btn:active {
+          margin-bottom: 10px; }
+    .field .deck .deck-cards {
+      margin-left: 50px; }
+      .field .deck .deck-cards .deck-card {
+        width: 140px;
+        height: 215px;
+        border-radius: 7px;
+        background: url(../img/reverse.png) center center/cover no-repeat; }

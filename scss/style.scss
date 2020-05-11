@@ -1,0 +1,179 @@
+@charset "UTF-8";
+
+@import "reset";
+
+
+
+/* ========= variables ========= */
+
+
+
+/* ========= clearfix ========= */
+
+.clearfix::after {
+	clear: both;
+	content: "";
+	display: block;
+}
+
+
+
+/* ========= common ========= */
+
+body {
+  font-family: 游明朝,"Yu Mincho",YuMincho,"Hiragino Mincho ProN","Hiragino Mincho Pro",HGS明朝E,メイリオ,Meiryo,serif;
+  font-size: 20px;
+  color: #fff;
+}
+
+.wrapper {
+  height: 100vh;
+  background: url(../img/XENO_bg.png) center center / cover no-repeat;
+}
+
+.inner {
+  width: 80%;
+  height: 90vh;
+  margin: 0 auto;
+  padding: 5vh 0;
+  display: flex;
+  justify-content: space-between;
+}
+
+li {
+  list-style: none;
+}
+
+img {
+  vertical-align: bottom;
+}
+
+
+
+/* ========= individuals ========= */
+
+.players {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 40%;
+
+  .hand {
+    .hand-cards {
+      display: flex;
+
+      .hand-card {
+        width: 200px;
+
+        img {
+          width: 100%;
+          border-radius: 10px;
+        }
+      }
+    }
+  }
+
+  #cp-hand {
+    .hand-cards {
+      .hand-card {
+        &.reverse {
+          position: relative;
+
+          &::after {
+            content: "";
+            display: block;
+            width: 200px;
+            height: 310px;
+            border-radius: 10px;
+            background: url(../img/reverse.png) center center / cover no-repeat;
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 10;
+          }
+        }
+      }
+    }
+  }
+}
+
+
+
+
+.field {
+  width: 55%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  .cemetery {
+    position: relative;
+
+    .cemetery-cards {
+      .cemetery-card {
+        width: 140px;
+        height: 215px;
+        border-radius: 7px;
+
+        img {
+          width: 100%;
+          border-radius: 10px;
+        }
+
+        @for $i from 2 through 18 {
+          &:nth-child(#{$i}) {
+            position: absolute;
+            top: 0;
+            left: ($i - 2) * 50px;
+          }
+        }
+      }
+    }
+  }
+
+  .deck {
+    display: flex;
+
+    .actions {
+      display: flex;
+      flex-direction: column;
+      // justify-content: space-around;
+      justify-content: center;
+
+      .btn {
+        background-color: transparent;
+        border: none;
+        cursor: pointer;
+        outline: none;
+        padding: 0;
+        appearance: none;
+        width: 100px;
+        height: 50px;
+        border-radius: 5px;
+        background: #ee7b1a;
+        box-shadow: 1px 1px 1px #000;
+        color: #fff;
+        font-size: 16px;
+      }
+
+      #draw-btn {
+        margin-bottom: 20px;
+
+        &:active {
+          margin-bottom: 10px;
+        }
+      }
+    }
+
+    .deck-cards {
+      margin-left: 50px;
+
+      .deck-card {
+        width: 140px;
+        height: 215px;
+        border-radius: 7px;
+        background: url(../img/reverse.png) center center / cover no-repeat;
+      }
+    }
+  }
+}
