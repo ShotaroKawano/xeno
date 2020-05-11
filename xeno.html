@@ -18,17 +18,14 @@
         <div class="players">
           <div id="cp-hand" class="hand">
             <ul class="hand-cards">
-              <!-- <li class="hand-card reverse"> -->
-              <!-- <li class="hand-card"> -->
-                <!-- <img src="img/03_占い師.png" alt=""> -->
-              <!-- </li> -->
+              <!-- 空の hand-card -->
+              <!-- <li class="hand-card"></li> -->
             </ul>
           </div>
           <div id="p1-hand" class="hand">
             <ul class="hand-cards">
-              <!-- <li class="hand-card"> -->
-                <!-- <img src="img/08_精霊.png" alt=""> -->
-              <!-- </li> -->
+              <!-- 空の hand-card -->
+              <!-- <li class="hand-card"></li> -->
             </ul>
           </div>
         </div>
@@ -36,16 +33,14 @@
         <div class="field">
           <div id="cp-cemetery" class="cemetery">
             <ul class="cemetery-cards">
-              <!-- 空のli -->
+              <!-- 空の cemetery-card -->
               <li class="cemetery-card"></li>
             </ul>
           </div>
           <div class="deck">
             <div class="actions">
-              <button id="draw-btn" class="btn">ドロー</button>
+              <button id="draw-btn4p1" class="btn">ドロー</button>
               <button id="draw-btn4cp" class="btn">ドロー4cp</button>
-              <!-- <div id="draw-btn" class="btn">ドロー</div> -->
-              <!-- <div>ドロー4cp</div> -->
             </div>
             <ul class="deck-cards">
               <li class="deck-card"></li>
@@ -53,20 +48,38 @@
           </div>
           <div id="p1-cemetery" class="cemetery">
             <ul class="cemetery-cards">
-              <!-- 空のli -->
+              <!-- 空の cemetery-card -->
               <li class="cemetery-card"></li>
             </ul>
           </div>
         </div>
 
-                  <!-- <div id="game"></div> -->
-                  <!-- <div id="judgment">勝敗</div> -->
+        <!-- <div id="game"></div> -->
+        <!-- <div id="judgment">勝敗</div> -->
 
       </div>
+
+      <!-- <div class="msg-container">
+        <p class="msg">勝利</p>
+      </div> -->
+
+      <div class="content">
+        <a class="js-modal-open" href="">クリックでモーダルを表示</a>
+      </div>
+      <div class="modal js-modal">
+        <div class="modal__bg js-modal-close"></div>
+        <div class="modal__content">
+          <p id="msg">勝敗</p>
+          <a class="js-modal-close" href="">閉じる</a>
+        </div>
+      </div>
+
     </div>
   </main>
 
   <footer></footer>
+
+  <script src="js/module.js"></script>
   <script src="js/app.js"></script>
 
 </body>
