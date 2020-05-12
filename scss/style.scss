@@ -154,7 +154,26 @@ img {
         margin-bottom: 20px;
 
         &:active {
-          margin-bottom: 10px;
+          // margin-bottom: 10px;
+          background: #ddd;
+        }
+      }
+
+      #draw-btn4cp {
+        margin-bottom: 20px;
+
+        &:active {
+          // margin-bottom: 10px;
+          background: #ddd;
+        }
+      }
+
+      #action-btn4cp {
+        margin-bottom: 20px;
+
+        &:active {
+          // margin-bottom: 10px;
+          background: #ddd;
         }
       }
     }

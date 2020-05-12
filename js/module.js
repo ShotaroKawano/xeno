@@ -212,14 +212,18 @@ function createDiscardEvent(who, whoseHand, whoseCemetery, deck) {
             whoseHand.splice(handIndex, 1);
             // カード効果を発動
             setTimeout(() => {
-              // console.log(cpCemetery);
+              console.log('cpCemetery: ' + cpCemetery);
               cardEffect4cp(cardRank);
+              whoseCemetery.push(cardRank);
             }, 1000);
             // $('#cp-hand .hand-cards .hand-card').addClass('reverse');
-            whoseCemetery.push(cardRank);
             // hand-card → cemetery-card
             $(this).removeClass('hand-card').addClass('cemetery-card');
             $('#' + who + '-cemetery .cemetery-cards').append($(this));
+            // 追加
+            setTimeout(() => {
+              alert('自分の番');
+            }, 3000);
           }
         }
       }
@@ -289,6 +293,15 @@ function createDiscardEvent(who, whoseHand, whoseCemetery, deck) {
             // hand-card → cemetery-card
             $(this).removeClass('hand-card').addClass('cemetery-card');
             $('#' + who + '-cemetery .cemetery-cards').append($(this));
+            // 追加
+            setTimeout(() => {
+              alert('相手の番');
+              if (isCpWiseManMode) {
+
+              } else {
+                cpAction();
+              }
+            }, 3000);
           }
         }
       }
@@ -447,6 +460,8 @@ function cardEffect4p1(cardRank) {
 
 
 
+var confirmedCard = 0;
+
 // エフェクト関数
 // スコープ管理が曖昧なまま使用している変数
 // deck, cpHand, isP1Protected, isCpEffectMode, isP1WiseManMode, p1Hand
@@ -469,10 +484,17 @@ function cardEffect4cp(cardRank) {
           isP1EffectMode = true;
           $('#draw-btn4p1').trigger('click');
           setTimeout(() => {
+            if (p1Hand[0] >= p1Hand[1] ) {
+              $('#p1-hand .hand-cards .hand-card:nth-child(1)').trigger('click');
+              confirmedCard = p1Hand[1];
+            } else {
+              $('#p1-hand .hand-cards .hand-card:nth-child(2)').trigger('click');
+              confirmedCard = p1Hand[0];
+            }
             // triggerクリックじゃないと動かない箇所
-            r = Math.ceil(Math.random() * 2);
-            some = $('#p1-hand .hand-cards .hand-card:nth-child(' + r + ')').trigger('click');
-            some.trigger('click');
+            // r = Math.ceil(Math.random() * 2);
+            // some = $('#p1-hand .hand-cards .hand-card:nth-child(' + r + ')').trigger('click');
+            // some.trigger('click');
           }, 3000);
         }
       }
@@ -484,7 +506,11 @@ function cardEffect4cp(cardRank) {
         isP1Protected = false;
       } else {
         alert('『捜査』：指名した相手の手札を言い当てると相手は脱落する。');
-        deducedRank = Math.ceil(Math.random() * 10);
+        if (p1Hand.includes(confirmedCard)) {
+          deducedRank = confirmedCard;
+        } else {
+          deducedRank = Math.ceil(Math.random() * 10);
+        }
         alert('相手はあなたが' + deducedRank + 'を持っていると推理しました');
         if (p1Hand.includes(deducedRank)) {
           judge(-1);
@@ -501,6 +527,7 @@ function cardEffect4cp(cardRank) {
       } else {
         alert('『透視』：指名した相手の手札を見る。(3秒間)');
         alert('相手はあなたの手札' + p1Hand[0] + 'を確認しました');
+        confirmedCard = p1Hand[0];
       }
       break;
 
@@ -538,6 +565,7 @@ function cardEffect4cp(cardRank) {
         if (!(p1Cemetery.includes(6) || cpCemetery.includes(6))) {
           alert('『対面』：指名した相手と手札を見せ合う。');
           alert('相手はあなたの手札' + p1Hand[0] + 'を確認しました');
+          confirmedCard = p1Hand[0];
           $('#cp-hand .hand-cards .hand-card.reverse').removeClass('reverse');
           setTimeout(() => {
             $('#cp-hand .hand-cards .hand-card').addClass('reverse');
@@ -582,10 +610,17 @@ function cardEffect4cp(cardRank) {
         isP1EffectMode = true;
         $('#draw-btn4p1').trigger('click');
         setTimeout(() => {
-          // 謎の挙動の箇所
-          r = Math.ceil(Math.random() * 2);
-          some = $('#p1-hand .hand-cards .hand-card:nth-child(' + r + ')').trigger('click');
-          some.trigger('click');
+          if (p1Hand[0] >= p1Hand[1]) {
+            $('#p1-hand .hand-cards .hand-card:nth-child(1)').trigger('click');
+            confirmedCard = p1Hand[1];
+          } else {
+            $('#p1-hand .hand-cards .hand-card:nth-child(2)').trigger('click');
+            confirmedCard = p1Hand[0];
+          }
+          // // 謎の挙動の箇所
+          // r = Math.ceil(Math.random() * 2);
+          // some = $('#p1-hand .hand-cards .hand-card:nth-child(' + r + ')').trigger('click');
+          // some.trigger('click');
         }, 3000);
         isP1EmperorMode = true;
       }

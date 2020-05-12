@@ -282,7 +282,15 @@ img {
       .field .deck .actions #draw-btn4p1 {
         margin-bottom: 20px; }
         .field .deck .actions #draw-btn4p1:active {
-          margin-bottom: 10px; }
+          background: #ddd; }
+      .field .deck .actions #draw-btn4cp {
+        margin-bottom: 20px; }
+        .field .deck .actions #draw-btn4cp:active {
+          background: #ddd; }
+      .field .deck .actions #action-btn4cp {
+        margin-bottom: 20px; }
+        .field .deck .actions #action-btn4cp:active {
+          background: #ddd; }
     .field .deck .deck-cards {
       margin-left: 150px;
       position: relative; }

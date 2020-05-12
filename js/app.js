@@ -24,16 +24,26 @@ createDiscardEvent('p1', p1Hand, p1Cemetery, deck);
 
 
 
-// $('#action-btn4cp').on('click', function () {
-  // cpAction();
-// });
+$('#action-btn4cp').on('click', function () {
+  cpAction();
+});
 
-// function cpAction() {
-  // $('#draw-btn4cp').trigger('click');
-  // setTimeout(() => {
+function cpAction() {
+  $('#draw-btn4cp').trigger('click');
+  setTimeout(() => {
     // triggerクリックじゃないと動かない箇所
-    // r = Math.ceil(Math.random() * 2);
-    // some = $('#cp-hand .hand-cards .hand-card:nth-child(' + r + ')').trigger('click');
-    // some.trigger('click');
-  // }, 3000);
-// }
+    // 10をクリックしたら止まってしまう
+    // alertが二回出たから２回クリックされてる
+    if (cpHand.includes(10)) {
+      if (cpHand[0] == 10) {
+        some = $('#cp-hand .hand-cards .hand-card:nth-child(2)').trigger('click');
+      } else {
+        some = $('#cp-hand .hand-cards .hand-card:nth-child(1)').trigger('click');
+      }
+    } else {
+      r = Math.ceil(Math.random() * 2);
+      some = $('#cp-hand .hand-cards .hand-card:nth-child(' + r + ')').trigger('click');
+    }
+    some.trigger('click');
+  }, 3000);
+}
