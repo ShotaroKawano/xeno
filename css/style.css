@@ -284,51 +284,46 @@ img {
         .field .deck .actions #draw-btn4p1:active {
           margin-bottom: 10px; }
     .field .deck .deck-cards {
-      margin-left: 50px; }
+      margin-left: 150px;
+      position: relative; }
       .field .deck .deck-cards .deck-card {
         width: 140px;
         height: 215px;
         border-radius: 7px;
         background: url(../img/reverse.png) center center/cover no-repeat; }
-
-.msg-container {
-  width: 300px;
-  height: 200px;
-  text-align: center;
-  line-height: 200px;
-  background: red;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  -webkit-transform: translate(-50%, -50%);
-  -ms-transform: translate(-50%, -50%);
-  transform: translate(-50%, -50%); }
-
-.content {
-  -webkit-box-sizing: border-box;
-  box-sizing: border-box;
-  margin: 0 auto;
-  padding: 40px; }
-
-.modal {
-  display: none;
-  height: 100vh;
-  position: fixed;
-  top: 0;
-  width: 100%; }
-  .modal .modal__bg {
-    background: rgba(0, 0, 0, 0.8);
-    height: 100vh;
-    position: absolute;
-    width: 100%; }
-  .modal .modal__content {
-    color: #000;
-    background: #fff;
-    left: 50%;
-    padding: 40px;
-    position: absolute;
-    top: 50%;
-    -webkit-transform: translate(-50%, -50%);
-    -ms-transform: translate(-50%, -50%);
-    transform: translate(-50%, -50%);
-    width: 60%; }
+        .field .deck .deck-cards .deck-card:nth-child(1) {
+          position: relative;
+          top: 0;
+          left: -70px;
+          -webkit-transform: rotate(90deg);
+          -ms-transform: rotate(90deg);
+          transform: rotate(90deg); }
+        .field .deck .deck-cards .deck-card:nth-child(2) {
+          position: absolute;
+          top: 0;
+          left: 2px; }
+        .field .deck .deck-cards .deck-card:nth-child(3) {
+          position: absolute;
+          top: 0;
+          left: 4px; }
+        .field .deck .deck-cards .deck-card:nth-child(4) {
+          position: absolute;
+          top: 0;
+          left: 6px; }
+        .field .deck .deck-cards .deck-card:nth-child(5) {
+          position: absolute;
+          top: 0;
+          left: 8px; }
+      .field .deck .deck-cards .content {
+        width: 130px;
+        height: 60px;
+        position: absolute;
+        top: 50%;
+        left: 55%;
+        -webkit-transform: translate(-50%, -50%);
+        -ms-transform: translate(-50%, -50%);
+        transform: translate(-50%, -50%);
+        background: #0079c2; }
+        .field .deck .deck-cards .content .num-left {
+          line-height: 60px;
+          text-align: center; }

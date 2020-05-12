@@ -1,14 +1,14 @@
 // モーダルウィンドウのtoggle
-$(function () {
-  $('.js-modal-open').on('click', function () {
-    $('.js-modal').fadeIn();
-    return false;
-  });
-  $('.js-modal-close').on('click', function () {
-    $('.js-modal').fadeOut();
-    return false;
-  });
-});
+// $(function () {
+//   $('.js-modal-open').on('click', function () {
+//     $('.js-modal').fadeIn();
+//     return false;
+//   });
+//   $('.js-modal-close').on('click', function () {
+//     $('.js-modal').fadeOut();
+//     return false;
+//   });
+// });
 
 
 
@@ -68,6 +68,14 @@ function logInfo(num = 0) {
 // ドロー関数
 function drawCard(who, whoseHand, deck) {
 
+  // 山札が0枚なら勝敗を判定
+  // 10を選んで山札0枚のとき手札2枚なのに勝負になってしまう
+  // ここに置いたおかげで引けないときの効果も無効化できてるっぽい
+  if (deck.length == 0) {
+    alert('山札が0枚になった。数字が大きい方の勝ち。')
+    judge();
+  }
+
   if (who == 'cp') {
     whoseHand.push(deck[0]);
     $('#' + who + '-hand .hand-cards').append('<li class="hand-card reverse"><img src="img/' + cardDictionary[deck[0]] + '" alt="' + deck[0] + '"></li>');
@@ -79,7 +87,7 @@ function drawCard(who, whoseHand, deck) {
   }
   $('#cp-hand .hand-cards .hand-card').addClass('reverse');
   $('#p1-hand .hand-cards .hand-card').removeClass('reverse');
-  // $('#deck').html('残り' + deck.length + '枚');
+  $('.num-left').html('残り' + deck.length + ' 枚');
 
 }
 
@@ -98,10 +106,14 @@ function createDrawEvent(who, whoseHand, btnSelector) {
 
 // ジャッジ関数
 function judge(specialV = 0) {
+  $('#cp-hand .hand-cards .hand-card').removeClass('reverse');
+  console.log(specialV);
+  console.log(cpHand[0]);
+  console.log(p1Hand[0]);
 
-  if (specialV = 1) {
+  if (specialV == 1) {
     judgment = 'あなたの勝ち';
-  } else if (specialV = -1) {
+  } else if (specialV == -1) {
     judgment = 'あなたの負け';
   } else {
     if ((p1Hand[0] > cpHand[0])) {
@@ -113,7 +125,8 @@ function judge(specialV = 0) {
     }
   }
 
-  $('#msg').html(judgment);
+  alert(judgment);
+  // $('#msg').html(judgment);
 }
 
 
@@ -124,6 +137,10 @@ var isCpEffectMode = false;
 // 賢者モードフラグ
 var isP1WiseManMode = 0;
 var isCpWiseManMode = 0;
+// 皇帝モード
+var isP1EmperorMode = false;
+var isCpEmperorMode = false;
+
 
 
 // ディスカードイベント追加関数
@@ -148,6 +165,28 @@ function createDiscardEvent(who, whoseHand, whoseCemetery, deck) {
         $(this).removeClass('hand-card').addClass('cemetery-card');
         $('#' + who + '-cemetery .cemetery-cards').append($(this));
         isCpEffectMode = false;
+        if (cardRank == 10) {
+          // 皇帝に殺された場合
+          if (isCpEmperorMode) {
+            alert('『潜伏・転生』：『皇帝』に脱落させられた。');
+            judge(-1);
+          // それ以外の場合
+          } else {
+            alert('『潜伏・転生』：『皇帝』以外に脱落させられた時に『転生札』で復活する。');
+            // 手札をすべて失う
+            leftCardRank = cpHand[0];
+            cpHand.splice(0, 1);
+            whoseCemetery.push(leftCardRank);
+            $('#cp-cemetery .cemetery-cards').append($('#cp-hand .hand-cards .hand-card').removeClass('hand-card').addClass('cemetery-card'));
+            // $('#cp-cemetery .cemetery-cards').append($('#cp-hand .hand-cards .hand-card'));
+            $('#cp-hand .hand-cards .hand-card').remove();
+            cpHand.push(reincarnation);
+            $('#cp-hand .hand-cards').append('<li class="hand-card reverse"><img src="img/' + cardDictionary[reincarnation] + '" alt="' + reincarnation + '"></li>');
+            $('.deck .deck-cards .deck-card:nth-child(1)').css('transform', 'rotate(0deg)');
+            $('.deck .deck-cards .deck-card:nth-child(1)').css('left', '0');
+            isCpEmperorMode = false;
+          }
+        }
       } else {
 
         // 賢者モードによるドロー？
@@ -159,10 +198,11 @@ function createDiscardEvent(who, whoseHand, whoseCemetery, deck) {
           $(this).remove();
           deck.push(cardRank);
           deck = shuffle(deck);
+          $('.num-left').html('残り' + deck.length + ' 枚');
           // 戻すカード2枚をカウント
           isCpWiseManMode--;
-        } else {
 
+        } else {
           // 10の場合はメッセージを表示して何も起こらない
           if (cardRank == 10) {
             alert('『潜伏・転生』：場に出すことができず、捨てさせられたら脱落する。『皇帝』以外に脱落させられた時に『転生札』で復活する。');
@@ -171,7 +211,10 @@ function createDiscardEvent(who, whoseHand, whoseCemetery, deck) {
             // クリックされたカードを手札から削除
             whoseHand.splice(handIndex, 1);
             // カード効果を発動
-            cardEffect4cp(cardRank);
+            setTimeout(() => {
+              // console.log(cpCemetery);
+              cardEffect4cp(cardRank);
+            }, 1000);
             // $('#cp-hand .hand-cards .hand-card').addClass('reverse');
             whoseCemetery.push(cardRank);
             // hand-card → cemetery-card
@@ -194,6 +237,28 @@ function createDiscardEvent(who, whoseHand, whoseCemetery, deck) {
         $(this).removeClass('hand-card').addClass('cemetery-card');
         $('#' + who + '-cemetery .cemetery-cards').append($(this));
         isP1EffectMode = false;
+        if (cardRank == 10) {
+          // 皇帝に殺された場合
+          if (isP1EmperorMode) {
+            alert('『潜伏・転生』：『皇帝』に脱落させられた。');
+            judge(-1);
+          // それ以外の場合
+          } else {
+            alert('『潜伏・転生』：『皇帝』以外に脱落させられた時に『転生札』で復活する。');
+            // 手札をすべて失う
+            leftCardRank = p1Hand[0];
+            p1Hand.splice(0, 1);
+            whoseCemetery.push(leftCardRank);
+            // hand-card → cemetery-card
+            $('#p1-cemetery .cemetery-cards').append($('#p1-hand .hand-cards .hand-card').removeClass('hand-card').addClass('cemetery-card'));
+            $('#p1-hand .hand-cards .hand-card').remove();
+            p1Hand.push(reincarnation);
+            $('#p1-hand .hand-cards').append('<li class="hand-card reverse"><img src="img/' + cardDictionary[reincarnation] + '" alt="' + reincarnation + '"></li>');
+            $('.deck .deck-cards .deck-card:nth-child(1)').css('transform', 'rotate(0deg)');
+            $('.deck .deck-cards .deck-card:nth-child(1)').css('left', '0');
+            isP1EmperorMode = false;
+          }
+        }
       } else {
 
         // 賢者モードによるドロー？
@@ -205,6 +270,7 @@ function createDiscardEvent(who, whoseHand, whoseCemetery, deck) {
           $(this).remove();
           deck.push(cardRank);
           deck = shuffle(deck);
+          $('.num-left').html('残り' + deck.length + ' 枚');
           // 戻すカード2枚をカウント
           isP1WiseManMode--;
         } else {
@@ -228,12 +294,6 @@ function createDiscardEvent(who, whoseHand, whoseCemetery, deck) {
       }
     }
 
-    // 山札が0枚なら勝敗を判定
-    // 10を選んで山札0枚のとき手札2枚なのに勝負になってしまう
-    if (deck.length == 0) {
-      judge();
-    }
-
     logInfo();
   });
 }
@@ -253,79 +313,124 @@ function cardEffect4p1(cardRank) {
     case 1:
       // 引けないから無効とか作らねば
       if (!(p1Cemetery.includes(1) || cpCemetery.includes(1))) {
+        if (isCpProtected) {
+          isCpProtected = false;
+        }
         alert('『革命』：1枚目の捨て札は何の効果も発動しない。');
       } else {
-        alert('『公開処刑』：指名した相手に山札から1枚引かせて、手札を2枚とも公開させる。そしてどちらか1枚を指定し捨てさせる。');
-        isCpEffectMode = true;
-        $('#draw-btn4cp').trigger('click');
-        $('#cp-hand .hand-cards .hand-card.reverse').removeClass('reverse');
+        if (isCpProtected) {
+          alert('相手は守られてる');
+          isCpProtected = false;
+        } else {
+          alert('『公開処刑』：指名した相手に山札から1枚引かせて、手札を2枚とも公開させる。そしてどちらか1枚を指定し捨てさせる。');
+          isCpEffectMode = true;
+          $('#draw-btn4cp').trigger('click');
+          $('#cp-hand .hand-cards .hand-card.reverse').removeClass('reverse');
+        }
       }
       break;
 
     case 2:
-      deducedRank = parseInt(window.prompt('『捜査』：指名した相手の手札を言い当てると相手は脱落する。', ''));
-      if (cpHand.includes(deducedRank)) {
-        judge(1);
+      if (isCpProtected) {
+        alert('相手は守られてる');
+        isCpProtected = false;
       } else {
-        alert('残念。ハズレ。');
+        deducedRank = parseInt(window.prompt('『捜査』：指名した相手の手札を言い当てると相手は脱落する。', ''));
+        if (cpHand.includes(deducedRank)) {
+          judge(1);
+        } else {
+          alert('残念。ハズレ。');
+        }
       }
       break;
 
     case 3:
-      alert('『透視』：指名した相手の手札を見る。(3秒間)');
-      $('#cp-hand .hand-cards .hand-card.reverse').removeClass('reverse');
-      setTimeout(() => {
-        $('#cp-hand .hand-cards .hand-card').addClass('reverse');
-      }, 3000);
+      if (isCpProtected) {
+        alert('相手は守られてる');
+        isCpProtected = false;
+      } else {
+        alert('『透視』：指名した相手の手札を見る。(3秒間)');
+        $('#cp-hand .hand-cards .hand-card.reverse').removeClass('reverse');
+        setTimeout(() => {
+          $('#cp-hand .hand-cards .hand-card').addClass('reverse');
+        }, 3000);
+      }
       break;
 
     case 4:
+      if (isCpProtected) {
+        isCpProtected = false;
+      }
       alert('『守護』：次の自分の手番まで自分への効果を無効にする。');
       isP1Protected = true;
       // 保留
       break;
 
     case 5:
-      alert('『疫病』：指名した相手に山札から1枚引かせる。2枚になった相手の手札を非公開にさせたまま、1枚を指定して捨てさせる。');
-      isCpEffectMode = true;
-      $('#draw-btn4cp').trigger('click');
-      //
-      // $('#cp-hand .hand-card reverse:nth-child(1)').before($('#cp-hand .hand-card reverse:nth-child(2)'));
+      if (isCpProtected) {
+        alert('相手は守られてる');
+        isCpProtected = false;
+      } else {
+        alert('『疫病』：指名した相手に山札から1枚引かせる。2枚になった相手の手札を非公開にさせたまま、1枚を指定して捨てさせる。');
+        isCpEffectMode = true;
+        $('#draw-btn4cp').trigger('click');
+        //
+        // $('#cp-hand .hand-card reverse:nth-child(1)').before($('#cp-hand .hand-card reverse:nth-child(2)'));
+      }
       break;
 
     case 6:
-      if (!(p1Cemetery.includes(6) || cpCemetery.includes(6))) {
-        alert('『対面』：指名した相手と手札を見せ合う。');
-        alert('cpがあなたの手札' + p1Hand[0] + 'を確認しました');
-        $('#cp-hand .hand-cards .hand-card.reverse').removeClass('reverse');
-        setTimeout(() => {
-          $('#cp-hand .hand-cards .hand-card').addClass('reverse');
-        }, 3000);
+      if (isCpProtected) {
+        alert('相手は守られてる');
+        isCpProtected = false;
       } else {
-        alert('『対決』：指名した相手と手札を見せ合い、数字の小さい方が脱落する。（見せ合う際は他のプレイヤーに見られないようにする）。');
-        judge();
+        if (!(p1Cemetery.includes(6) || cpCemetery.includes(6))) {
+          alert('『対面』：指名した相手と手札を見せ合う。');
+          alert('相手はあなたの手札' + p1Hand[0] + 'を確認しました');
+          $('#cp-hand .hand-cards .hand-card.reverse').removeClass('reverse');
+          setTimeout(() => {
+            $('#cp-hand .hand-cards .hand-card').addClass('reverse');
+          }, 3000);
+        } else {
+          alert('『対決』：指名した相手と手札を見せ合い、数字の小さい方が脱落する。（見せ合う際は他のプレイヤーに見られないようにする）。');
+          judge();
+        }
       }
       break;
 
     case 7:
+      if (isCpProtected) {
+        isCpProtected = false;
+      }
       alert('『選択』：次の手番で山札から１枚引くかわりに３枚引き、そのうち１枚を選ぶことができる。残り２枚は山札へ戻す。');
       isP1WiseManMode = 2;
       break;
 
     case 8:
-      alert('『交換』：指名した相手の手札と自分の持っている手札を交換する。');
-      temp = p1Hand[0];
-      p1Hand[0] = cpHand[0];
-      cpHand[0] = temp;
-      $('#p1-hand .hand-cards').html('<li class="hand-card"><img src = "img/' + cardDictionary[p1Hand[0]] + '" alt="' + p1Hand[0] + '"></li>');
-      $('#cp-hand .hand-cards').html('<li class="hand-card reverse"><img src = "img/' + cardDictionary[cpHand[0]] + '" alt="' + cpHand[0] + '"></li>');
+      if (isCpProtected) {
+        alert('相手は守られてる');
+        isCpProtected = false;
+      } else {
+        alert('『交換』：指名した相手の手札と自分の持っている手札を交換する。');
+        temp = p1Hand[0];
+        p1Hand[0] = cpHand[0];
+        cpHand[0] = temp;
+        $('#p1-hand .hand-cards').html('<li class="hand-card"><img src = "img/' + cardDictionary[p1Hand[0]] + '" alt="' + p1Hand[0] + '"></li>');
+        $('#cp-hand .hand-cards').html('<li class="hand-card reverse"><img src = "img/' + cardDictionary[cpHand[0]] + '" alt="' + cpHand[0] + '"></li>');
+      }
       break;
 
     case 9:
-      alert('『公開処刑』：指名した相手に山札から1枚引かせて、手札を2枚とも公開させる。そしてどちらか1枚を指定し捨てさせる。');
-      isCpEffectMode = true;
-      $('#draw-btn4cp').trigger('click');
-      $('#cp-hand .hand-cards .hand-card.reverse').removeClass('reverse');
+      if (isCpProtected) {
+        alert('相手は守られてる');
+        isCpProtected = false;
+      } else {
+        alert('『公開処刑』：指名した相手に山札から1枚引かせて、手札を2枚とも公開させる。そしてどちらか1枚を指定し捨てさせる。');
+        isCpEffectMode = true;
+        $('#draw-btn4cp').trigger('click');
+        $('#cp-hand .hand-cards .hand-card.reverse').removeClass('reverse');
+        isCpEmperorMode = true;
+      }
       break;
 
     case 10:
@@ -337,6 +442,7 @@ function cardEffect4p1(cardRank) {
       alert('エラーが発生しました');
       break;
   }
+  // 引けなければ効果なしとかも
 }
 
 
@@ -350,94 +456,139 @@ function cardEffect4cp(cardRank) {
     case 1:
       // 引けないから無効とか作らねば
       if (!(p1Cemetery.includes(1) || cpCemetery.includes(1))) {
+        if (isP1Protected) {
+          isCpProtected = false;
+        }
         alert('『革命』：1枚目の捨て札は何の効果も発動しない。');
       } else {
-        alert('『公開処刑』：指名した相手に山札から1枚引かせて、手札を2枚とも公開させる。そしてどちらか1枚を指定し捨てさせる。');
-        isP1EffectMode = true;
-        $('#draw-btn4p1').trigger('click');
-        // triggerクリックじゃないと動かない箇所
-        setTimeout(() => {
-          r = Math.ceil(Math.random() * 2);
-          some = $('#p1-hand ul .hand-card:nth-child(' + r + ')').trigger('click');
-          some.trigger('click');
-        }, 3000);
+        if (isP1Protected) {
+          alert('あなたは守られてる');
+          isP1Protected = false;
+        } else {
+          alert('『公開処刑』：指名した相手に山札から1枚引かせて、手札を2枚とも公開させる。そしてどちらか1枚を指定し捨てさせる。');
+          isP1EffectMode = true;
+          $('#draw-btn4p1').trigger('click');
+          setTimeout(() => {
+            // triggerクリックじゃないと動かない箇所
+            r = Math.ceil(Math.random() * 2);
+            some = $('#p1-hand .hand-cards .hand-card:nth-child(' + r + ')').trigger('click');
+            some.trigger('click');
+          }, 3000);
+        }
       }
       break;
 
     case 2:
-      alert('『捜査』：指名した相手の手札を言い当てると相手は脱落する。');
-      deducedRank = Math.ceil(Math.random() * 10);
-      alert('cpはあなたが' + deducedRank + 'を持っていると推理しました');
-      if (p1Hand.includes(deducedRank)) {
-        judge(-1);
+      if (isP1Protected) {
+        alert('あなたは守られてる');
+        isP1Protected = false;
       } else {
-        alert('ハズレたため、生き残りました');
+        alert('『捜査』：指名した相手の手札を言い当てると相手は脱落する。');
+        deducedRank = Math.ceil(Math.random() * 10);
+        alert('相手はあなたが' + deducedRank + 'を持っていると推理しました');
+        if (p1Hand.includes(deducedRank)) {
+          judge(-1);
+        } else {
+          alert('ハズレたため、生き残りました');
+        }
       }
       break;
 
     case 3:
-      alert('『透視』：指名した相手の手札を見る。(3秒間)');
-      alert('cpがあなたの手札' + p1Hand[0] + 'を確認しました');
+      if (isP1Protected) {
+        alert('あなたは守られてる');
+        isP1Protected = false;
+      } else {
+        alert('『透視』：指名した相手の手札を見る。(3秒間)');
+        alert('相手はあなたの手札' + p1Hand[0] + 'を確認しました');
+      }
       break;
 
     case 4:
+      if (isP1Protected) {
+        isP1Protected = false;
+      }
       alert('『守護』：次の自分の手番まで自分への効果を無効にする。');
       isCpProtected = true;
       // 保留
       break;
 
     case 5:
-      alert('『疫病』：指名した相手に山札から1枚引かせる。2枚になった相手の手札を非公開にさせたまま、1枚を指定して捨てさせる。');
-      isP1EffectMode = true;
-      $('#draw-btn4p1').trigger('click');
-      $('#p1-hand .hand-cards .hand-card').addClass('reverse');
-      setTimeout(() => {
-        r = Math.ceil(Math.random() * 2);
-        some = $('#p1-hand ul .hand-card:nth-child(' + r + ')').trigger('click');
-        some.trigger('click');
-      }, 3000);
+      if (isP1Protected) {
+        alert('あなたは守られてる');
+        isP1Protected = false;
+      } else {
+        alert('『疫病』：指名した相手に山札から1枚引かせる。2枚になった相手の手札を非公開にさせたまま、1枚を指定して捨てさせる。');
+        isP1EffectMode = true;
+        $('#draw-btn4p1').trigger('click');
+        $('#p1-hand .hand-cards .hand-card').addClass('reverse');
+        setTimeout(() => {
+          r = Math.ceil(Math.random() * 2);
+          some = $('#p1-hand .hand-cards .hand-card:nth-child(' + r + ')').trigger('click');
+          some.trigger('click');
+        }, 3000);
+      }
       break;
 
     case 6:
-      if (!(p1Cemetery.includes(6) || cpCemetery.includes(6))) {
-        alert('『対面』：指名した相手と手札を見せ合う。');
-        alert('cpがあなたの手札' + p1Hand[0] + 'を確認しました');
-        $('#cp-hand .hand-cards .hand-card.reverse').removeClass('reverse');
-        setTimeout(() => {
-          $('#cp-hand .hand-cards .hand-card').addClass('reverse');
-        }, 3000);
+      if (isP1Protected) {
+        alert('あなたは守られてる');
+        isP1Protected = false;
       } else {
-        alert('『対決』：指名した相手と手札を見せ合い、数字の小さい方が脱落する。（見せ合う際は他のプレイヤーに見られないようにする）。');
-        judge();
+        if (!(p1Cemetery.includes(6) || cpCemetery.includes(6))) {
+          alert('『対面』：指名した相手と手札を見せ合う。');
+          alert('相手はあなたの手札' + p1Hand[0] + 'を確認しました');
+          $('#cp-hand .hand-cards .hand-card.reverse').removeClass('reverse');
+          setTimeout(() => {
+            $('#cp-hand .hand-cards .hand-card').addClass('reverse');
+          }, 3000);
+        } else {
+          alert('『対決』：指名した相手と手札を見せ合い、数字の小さい方が脱落する。（見せ合う際は他のプレイヤーに見られないようにする）。');
+          judge();
+        }
       }
       break;
 
 
 
     case 7:
+      if (isP1Protected) {
+        isP1Protected = false;
+      }
       alert('『選択』：次の手番で山札から１枚引くかわりに３枚引き、そのうち１枚を選ぶことができる。残り２枚は山札へ戻す。');
       isCpWiseManMode = 2;
       break;
 
     case 8:
-      alert('『交換』：指名した相手の手札と自分の持っている手札を交換する。');
-      temp = p1Hand[0];
-      p1Hand[0] = cpHand[0];
-      cpHand[0] = temp;
-      $('#p1-hand .hand-cards').html('<li class="hand-card"><img src = "img/' + cardDictionary[p1Hand[0]] + '" alt="' + p1Hand[0] + '"></li>');
-      $('#cp-hand .hand-cards').html('<li class="hand-card reverse"><img src = "img/' + cardDictionary[cpHand[0]] + '" alt="' + cpHand[0] + '"></li>');
+      if (isP1Protected) {
+        alert('あなたは守られてる');
+        isP1Protected = false;
+      } else {
+        alert('『交換』：指名した相手の手札と自分の持っている手札を交換する。');
+        temp = p1Hand[0];
+        p1Hand[0] = cpHand[0];
+        cpHand[0] = temp;
+        $('#p1-hand .hand-cards').html('<li class="hand-card"><img src = "img/' + cardDictionary[p1Hand[0]] + '" alt="' + p1Hand[0] + '"></li>');
+        $('#cp-hand .hand-cards').html('<li class="hand-card reverse"><img src = "img/' + cardDictionary[cpHand[0]] + '" alt="' + cpHand[0] + '"></li>');
+      }
       break;
 
     case 9:
-      alert('『公開処刑』：指名した相手に山札から1枚引かせて、手札を2枚とも公開させる。そしてどちらか1枚を指定し捨てさせる。');
-      isP1EffectMode = true;
-      $('#draw-btn4p1').trigger('click');
-      $('#cp-hand .hand-cards .hand-card.reverse').removeClass('reverse');
-      setTimeout(() => {
-        r = Math.ceil(Math.random() * 2);
-        some = $('#p1-hand .hand-cards .hand-card:nth-child(' + r + ')').trigger('click');
-        some.trigger('click');
-      }, 3000);
+      if (isP1Protected) {
+        alert('あなたは守られてる');
+        isP1Protected = false;
+      } else {
+        alert('『公開処刑』：指名した相手に山札から1枚引かせて、手札を2枚とも公開させる。そしてどちらか1枚を指定し捨てさせる。');
+        isP1EffectMode = true;
+        $('#draw-btn4p1').trigger('click');
+        setTimeout(() => {
+          // 謎の挙動の箇所
+          r = Math.ceil(Math.random() * 2);
+          some = $('#p1-hand .hand-cards .hand-card:nth-child(' + r + ')').trigger('click');
+          some.trigger('click');
+        }, 3000);
+        isP1EmperorMode = true;
+      }
       break;
 
     case 10:
