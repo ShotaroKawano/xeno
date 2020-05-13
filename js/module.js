@@ -297,7 +297,32 @@ function createDiscardEvent(who, whoseHand, whoseCemetery, deck) {
             setTimeout(() => {
               alert('相手の番');
               if (isCpWiseManMode) {
-
+                $('#draw-btn4cp').trigger('click');
+                $('#draw-btn4cp').trigger('click');
+                $('#draw-btn4cp').trigger('click');
+                setTimeout(() => {
+                  r = Math.ceil(Math.random() * 4);
+                  some = $('#cp-hand .hand-cards .hand-card:nth-child(' + r + ')').trigger('click');
+                  some.trigger('click');
+                }, 3000);
+                setTimeout(() => {
+                  r = Math.ceil(Math.random() * 3);
+                  some = $('#cp-hand .hand-cards .hand-card:nth-child(' + r + ')').trigger('click');
+                  some.trigger('click');
+                }, 3000);
+                setTimeout(() => {
+                  if (cpHand.includes(10)) {
+                    if (cpHand[0] == 10) {
+                      some = $('#cp-hand .hand-cards .hand-card:nth-child(2)').trigger('click');
+                    } else {
+                      some = $('#cp-hand .hand-cards .hand-card:nth-child(1)').trigger('click');
+                    }
+                  } else {
+                    r = Math.ceil(Math.random() * 2);
+                    some = $('#cp-hand .hand-cards .hand-card:nth-child(' + r + ')').trigger('click');
+                  }
+                  some.trigger('click');
+                }, 3000);
               } else {
                 cpAction();
               }
